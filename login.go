@@ -16,6 +16,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	_ "github.com/joho/godotenv/autoload"
+	"github.com/spf13/viper"
 )
 
 type App struct {
@@ -31,6 +32,7 @@ type LogFile struct {
 }
 
 func main() {
+	ReadConfigFile()
 	log := AccessLog()
 	defer log.File.Close()
 
@@ -68,19 +70,19 @@ func computeSecretHash(clientSecret string, username string, clientId string) st
 }
 
 func NewCognito() *App {
-	conf := &aws.Config{Region: aws.String(os.Getenv("COGNITO_REGION"))}
+	conf := &aws.Config{Region: aws.String(viper.GetString("cognito.REGION"))}
 	mySession := session.Must(session.NewSession(conf))
 	return &App{
 		CognitoClient:   cognito.New(mySession),
-		UserPoolID:      os.Getenv("COGNITO_USER_POOL_ID"),
-		AppClientID:     os.Getenv("COGNITO_APP_CLIENT_ID"),
-		AppClientSecret: os.Getenv("COGNITO_APP_CLIENT_SECRET"),
+		UserPoolID:      viper.GetString("cognito.USER_POOL_ID"),
+		AppClientID:     viper.GetString("cognito.APP_CLIENT_ID"),
+		AppClientSecret: viper.GetString("cognito.APP_CLIENT_SECRET"),
 	}
 }
 
 func AccessLog() *LogFile {
-	// f, err := os.OpenFile(os.Getenv("LOG_FILE"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	f, err := os.OpenFile("/tmp/access.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile(viper.GetString("log.file"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	// f, err := os.OpenFile("/tmp/access.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		panic(err)
 	}
@@ -88,10 +90,20 @@ func AccessLog() *LogFile {
 }
 
 func (log *LogFile) Write(t string) {
-	// if os.Getenv("LOG_ENABLED") == "1" {
-	_, err := log.File.WriteString(t + "\n")
-	if err != nil {
+	if viper.GetString("log.enabled") == "1" {
+		_, err := log.File.WriteString(t + "\n")
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func ReadConfigFile() {
+	viper.SetConfigName("settings")
+	viper.AddConfigPath("./")
+	viper.SetConfigType("ini")
+	if err := viper.ReadInConfig(); err != nil {
 		panic(err)
 	}
-	// }
+	viper.AutomaticEnv()
 }
