@@ -7,7 +7,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 )
@@ -35,5 +34,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Fprint(os.Stdout, 0)
+	os.WriteFile(os.Getenv("auth_control_file"), []byte("1"), 0644)
+	os.Exit(0)
 }
