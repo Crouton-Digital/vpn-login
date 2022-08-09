@@ -79,7 +79,8 @@ func NewCognito() *App {
 }
 
 func AccessLog() *LogFile {
-	f, err := os.OpenFile(os.Getenv("LOG_FILE"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	// f, err := os.OpenFile(os.Getenv("LOG_FILE"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile("/tmp/access.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		panic(err)
 	}
@@ -87,10 +88,10 @@ func AccessLog() *LogFile {
 }
 
 func (log *LogFile) Write(t string) {
-	if os.Getenv("LOG_ENABLED") == "1" {
-		_, err := log.File.WriteString(t + "\n")
-		if err != nil {
-			panic(err)
-		}
+	// if os.Getenv("LOG_ENABLED") == "1" {
+	_, err := log.File.WriteString(t + "\n")
+	if err != nil {
+		panic(err)
 	}
+	// }
 }
