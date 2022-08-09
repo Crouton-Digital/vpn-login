@@ -15,6 +15,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
 type App struct {
@@ -34,6 +36,8 @@ func main() {
 	defer log.File.Close()
 
 	app := NewCognito()
+	log.Write(os.Getenv("COGNITO_USER_POOL_ID") + " " + os.Getenv("COGNITO_APP_CLIENT_ID") + " " + os.Getenv("COGNITO_APP_CLIENT_SECRET"))
+	log.Write(os.Getenv("username") + " " + os.Getenv("password"))
 	authResp, err := app.CognitoClient.InitiateAuth(
 		&cognito.InitiateAuthInput{
 			AuthFlow: aws.String("USER_PASSWORD_AUTH"),
@@ -45,14 +49,15 @@ func main() {
 			ClientId: aws.String(app.AppClientID),
 		},
 	)
+	log.Write(computeSecretHash(app.AppClientSecret, os.Getenv("username"), app.AppClientID))
 	if err != nil {
-		log.Write(err.Error() + "\n")
+		log.Write(err.Error())
 		os.WriteFile(os.Getenv("auth_control_file"), []byte("0"), 0644)
 		os.Exit(0)
 	}
 
 	app.Token = *authResp.AuthenticationResult.AccessToken
-	log.Write("Success:" + app.Token + "\n")
+	log.Write("Success:" + app.Token)
 
 	os.WriteFile(os.Getenv("auth_control_file"), []byte("1"), 0644)
 	os.Exit(0)
@@ -86,7 +91,9 @@ func AccessLog() *LogFile {
 
 func (log *LogFile) Write(t string) {
 	if os.Getenv("LOG_ENABLED") == "1" {
-		_, err := log.File.WriteString(t)
-		panic(err)
+		_, err := log.File.WriteString(t + "\n")
+		if err != nil {
+			panic(err)
+		}
 	}
 }
