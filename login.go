@@ -46,7 +46,7 @@ func main() {
 			ClientId: aws.String(app.AppClientID),
 		},
 	)
-	log.Write(computeSecretHash(app.AppClientSecret, os.Getenv("username"), app.AppClientID))
+
 	if err != nil {
 		log.Write(err.Error())
 		os.WriteFile(os.Getenv("auth_control_file"), []byte("0"), 0644)
