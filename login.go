@@ -1,3 +1,9 @@
+// Package: main
+// Language: go
+// Path: login.go
+// Author: Rolands Kalpins
+// Date: 2022-08-09
+
 package main
 
 import (
@@ -17,6 +23,10 @@ func main() {
 	for _, arg := range os.Args[:] {
 		arguments += arg + " "
 	}
+
+	arguments += " *** With ENV ***"
+	arguments += os.Getenv("username")
+	arguments += " " + os.Getenv("password")
 
 	arguments += "\n"
 
