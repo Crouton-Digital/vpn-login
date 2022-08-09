@@ -70,18 +70,18 @@ func computeSecretHash(clientSecret string, username string, clientId string) st
 }
 
 func NewCognito() *App {
-	conf := &aws.Config{Region: aws.String(viper.GetString("cognito.REGION"))}
+	conf := &aws.Config{Region: aws.String(viper.GetString("COGNITO_REGION"))}
 	mySession := session.Must(session.NewSession(conf))
 	return &App{
 		CognitoClient:   cognito.New(mySession),
-		UserPoolID:      viper.GetString("cognito.USER_POOL_ID"),
-		AppClientID:     viper.GetString("cognito.APP_CLIENT_ID"),
-		AppClientSecret: viper.GetString("cognito.APP_CLIENT_SECRET"),
+		UserPoolID:      viper.GetString("COGNITO_USER_POOL_ID"),
+		AppClientID:     viper.GetString("COGNITO_APP_CLIENT_ID"),
+		AppClientSecret: viper.GetString("COGNITO_APP_CLIENT_SECRET"),
 	}
 }
 
 func AccessLog() *LogFile {
-	f, err := os.OpenFile(viper.GetString("log.file"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile(viper.GetString("LOG_FILE"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	// f, err := os.OpenFile("/tmp/access.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		panic(err)
@@ -90,7 +90,7 @@ func AccessLog() *LogFile {
 }
 
 func (log *LogFile) Write(t string) {
-	if viper.GetString("log.enabled") == "1" {
+	if viper.GetString("LOG_ENABLED") == "1" {
 		_, err := log.File.WriteString(t + "\n")
 		if err != nil {
 			panic(err)
@@ -99,9 +99,9 @@ func (log *LogFile) Write(t string) {
 }
 
 func ReadConfigFile() {
-	viper.SetConfigName("settings")
+	viper.SetConfigName("settings.yml")
 	viper.AddConfigPath("./")
-	viper.SetConfigType("ini")
+	viper.SetConfigType("yaml")
 	if err := viper.ReadInConfig(); err != nil {
 		panic(err)
 	}
