@@ -15,7 +15,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
-
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -36,8 +35,6 @@ func main() {
 	defer log.File.Close()
 
 	app := NewCognito()
-	log.Write(os.Getenv("COGNITO_USER_POOL_ID") + " " + os.Getenv("COGNITO_APP_CLIENT_ID") + " " + os.Getenv("COGNITO_APP_CLIENT_SECRET"))
-	log.Write(os.Getenv("username") + " " + os.Getenv("password"))
 	authResp, err := app.CognitoClient.InitiateAuth(
 		&cognito.InitiateAuthInput{
 			AuthFlow: aws.String("USER_PASSWORD_AUTH"),
