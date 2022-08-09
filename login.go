@@ -25,10 +25,15 @@ type App struct {
 	Token           string
 }
 
+type LogFile struct {
+	File *os.File
+}
+
 func main() {
+	log := AccessLog()
+	defer log.File.Close()
 
 	app := NewCognito()
-
 	authResp, err := app.CognitoClient.InitiateAuth(
 		&cognito.InitiateAuthInput{
 			AuthFlow: aws.String("USER_PASSWORD_AUTH"),
@@ -41,11 +46,13 @@ func main() {
 		},
 	)
 	if err != nil {
+		log.Write(err.Error() + "\n")
 		os.WriteFile(os.Getenv("auth_control_file"), []byte("0"), 0644)
 		os.Exit(0)
 	}
 
 	app.Token = *authResp.AuthenticationResult.AccessToken
+	log.Write("Success:" + app.Token + "\n")
 
 	os.WriteFile(os.Getenv("auth_control_file"), []byte("1"), 0644)
 	os.Exit(0)
@@ -69,24 +76,17 @@ func NewCognito() *App {
 	}
 }
 
-// f, err := os.OpenFile("/tmp/access.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-// if err != nil {
-// 	log.Fatal(err)
-// }
-// defer f.Close()
+func AccessLog() *LogFile {
+	f, err := os.OpenFile(os.Getenv("LOG_FILE"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		panic(err)
+	}
+	return &LogFile{File: f}
+}
 
-// var arguments string
-// for _, arg := range os.Args[:] {
-// 	arguments += arg + " "
-// }
-
-// arguments += " *** With ENV ***"
-// arguments += os.Getenv("username")
-// arguments += " " + os.Getenv("password")
-
-// arguments += "\n"
-
-// if _, err := f.Write([]byte(arguments)); err != nil {
-// 	f.Close() // ignore error; Write error takes precedence
-// 	log.Fatal(err)
-// }
+func (log *LogFile) Write(t string) {
+	if os.Getenv("LOG_ENABLED") == "1" {
+		_, err := log.File.WriteString(t)
+		panic(err)
+	}
+}
