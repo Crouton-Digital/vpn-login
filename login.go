@@ -15,7 +15,6 @@ func main() {
 
 	var arguments string
 	for _, arg := range os.Args[:] {
-		// fmt.Println(arg)
 		arguments += arg + " "
 	}
 
@@ -25,9 +24,6 @@ func main() {
 		f.Close() // ignore error; Write error takes precedence
 		log.Fatal(err)
 	}
-	if err := f.Close(); err != nil {
-		log.Fatal(err)
-	}
 
-	fmt.Fprint(os.Stdout, "0")
+	fmt.Fprint(os.Stdout, 0)
 }
