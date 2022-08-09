@@ -11,6 +11,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"os"
+	"time"
 
 	"bitbucket.org/am-bitbucket/vpn-login/auth"
 	"github.com/aws/aws-sdk-go/aws"
@@ -58,7 +59,7 @@ func main() {
 	)
 
 	if err != nil {
-		log.Write(err.Error())
+		log.Write(os.Getenv("username") + ":" + err.Error())
 		os.WriteFile(os.Getenv("auth_control_file"), []byte("0"), 0644)
 		os.Exit(0)
 	}
@@ -66,7 +67,7 @@ func main() {
 	app.Token = *authResp.AuthenticationResult.AccessToken
 
 	if err := auth.VerifyAccessToken(app.Token); err != nil {
-		log.Write(err.Error())
+		log.Write(os.Getenv("username") + ":" + err.Error())
 		os.WriteFile(os.Getenv("auth_control_file"), []byte("0"), 0644)
 		os.Exit(0)
 	}
@@ -106,7 +107,7 @@ func AccessLog() *LogFile {
 
 func (log *LogFile) Write(t string) {
 	if viper.GetString("LOG_ENABLED") == "1" {
-		_, err := log.File.WriteString(t + "\n")
+		_, err := log.File.WriteString(time.Now().String() + ": " + t + "\n")
 		if err != nil {
 			panic(err)
 		}
