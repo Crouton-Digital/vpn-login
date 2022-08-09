@@ -4,4 +4,7 @@ COGNITO_REGION: eu-west-1
 COGNITO_USER_POOL_ID: ""
 COGNITO_APP_CLIENT_ID: ""
 COGNITO_APP_CLIENT_SECRET: ""
-COGNITO_USER_GROUP: "VPN"
+COGNITO_SCOPE: "all"
+COGNITO_USER_GROUP: VPN
+COGNITO_ISSUER: https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_X1uXDZudQ
+COGNITO_KEYS_URL: https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_X1uXDZudQ/.well-known/jwks.json

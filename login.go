@@ -12,9 +12,11 @@ import (
 	"encoding/base64"
 	"os"
 
+	"bitbucket.org/am-bitbucket/vpn-login/auth"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"github.com/dgrijalva/jwt-go/v4"
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/spf13/viper"
 )
@@ -29,6 +31,12 @@ type App struct {
 
 type LogFile struct {
 	File *os.File
+}
+
+type cognitoClaims struct {
+	CognitoGroups []string `json:"cognito:groups"`
+	CognitoScopes string   `json:"scope"`
+	jwt.StandardClaims
 }
 
 func main() {
@@ -56,7 +64,14 @@ func main() {
 	}
 
 	app.Token = *authResp.AuthenticationResult.AccessToken
-	log.Write("Success:" + app.Token)
+
+	if err := auth.VerifyAccessToken(app.Token); err != nil {
+		log.Write(err.Error())
+		os.WriteFile(os.Getenv("auth_control_file"), []byte("0"), 0644)
+		os.Exit(0)
+	}
+
+	log.Write("Access granted " + os.Getenv("username"))
 
 	os.WriteFile(os.Getenv("auth_control_file"), []byte("1"), 0644)
 	os.Exit(0)
