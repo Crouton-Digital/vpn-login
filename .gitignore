@@ -1,1 +1,5 @@
 access.log
+settings.json
+.vscode
+.env
+.DS_Store
