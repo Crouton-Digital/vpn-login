@@ -1,6 +1,6 @@
 FROM golang:1.18.5 as builder
 
-COPY vpn-login/ /opt/
+COPY . /opt/
 RUN cd /opt && rm -f vpn-login && go mod vendor && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o vpn-login .
 
 
