@@ -4,3 +4,5 @@ settings.json
 .env
 .DS_Store
 vpn-login
+/vendor/
+/.idea/

@@ -1,0 +1,10 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Build OpenVPN
+    args: [ 'build', '-f', 'Dockerfile', '-t', 'eu.gcr.io/$PROJECT_ID/${_SERVICE}:$TAG_NAME', '.' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Push OpenVPN
+    args: [ 'push', 'eu.gcr.io/$PROJECT_ID/${_SERVICE}:$TAG_NAME' ]
+
+substitutions:
+  _SERVICE: openvpn
