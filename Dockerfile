@@ -10,7 +10,7 @@ FROM alpine:3.15.5
 # Install needed packages
 RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community/" >> /etc/apk/repositories && \
     echo "http://dl-4.alpinelinux.org/alpine/edge/testing/" >> /etc/apk/repositories && \
-    apk update && apk add openssl easy-rsa openvpn openvpn-auth-ldap openvpn-auth-pam openvpn-auth-script iptables  && \
+    apk update && apk add openssl easy-rsa openvpn openvpn-auth-ldap openvpn-auth-pam openvpn-auth-script iptables bash  && \
     rm -rf /tmp/* /var/tmp/* /var/cache/apk/* /var/cache/distfiles/*
 
 RUN mkdir /opt/openvpn
