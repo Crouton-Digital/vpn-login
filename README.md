@@ -139,6 +139,28 @@ COGNITO_USER_GROUP: <Cognito VPN Group name>
 COGNITO_ISSUER: https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_******
 COGNITO_KEYS_URL: https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_*******/.well-known/jwks.json
 ```
+## Deploy service to GKE cluster use Terraform
+
+```sh
+# Clone infra git repo 
+git clone git@bitbucket.org:am-bitbucket/infra-test.git
+cd infra-test/europe-west3/gke/k8s/vpn/
+# Init Terraform project and sync state 
+terraform init 
+# Plan deploy 
+terraform plan
+# Apply changes 
+terraform apply
+
+# get VPN server external ip
+kubectl get svc -o wide -n vpn
+
+#W1223 15:02:03.541762   70841 gcp.go:120] WARNING: the gcp auth plugin is deprecated in v1.22+, unavailable in v1.25+; use gcloud instead.
+#To learn more, consult https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+#NAME              TYPE           CLUSTER-IP   EXTERNAL-IP      PORT(S)                          AGE    SELECTOR
+#openvpn-service   LoadBalancer   10.7.6.130   34.159.232.126   1194:32603/UDP,65347:31770/UDP   129d   app=openvpn
+```
+
 
 ## Client OpenVPN Config
 
