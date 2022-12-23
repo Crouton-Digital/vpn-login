@@ -195,6 +195,11 @@ resolv-retry infinite
 ## How to install OpenVPN client
 * [User Guide: OpenVPN Client Install](https://hodlers.atlassian.net/wiki/spaces/AM/pages/285179905/VPN+to+kubernetes+test+environment)
 
+## Dependencies
+- OpenVPN
+
+## Built Using
+- [Go](https://golang.com/) - Go Programming Language
 
 ## Improvements
 
