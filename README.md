@@ -2,10 +2,6 @@
 
 That script make auth VPN user with user credentional like AWS Cognito and etc
 
-## Table of Contents
-
-[TOC]
-
 ## About
 
 This service
