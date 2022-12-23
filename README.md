@@ -65,34 +65,34 @@ cp pki/issued/client.crt ../client/
 ## Client OpenVPN Config
 
 Create file <name connection>.ovpn
-
-> client
-> persist-tun
-> persist-key
-> auth-user-pass
-> nobind
-> dev tun
-> remote < ip adress you can get kubectl get svc -o wide -n vpn > 1194 udp
-> resolv-retry infinite
-> 
-> <key>
-> -----BEGIN PRIVATE KEY-----
->    < client key >
-> -----END PRIVATE KEY-----
-> </key>
-> <cert>
-> -----BEGIN CERTIFICATE-----
->    < client crt >
-> -----END CERTIFICATE-----
-> </cert>
-> <ca>
-> -----BEGIN CERTIFICATE-----
->     < ca crt >
-> -----END CERTIFICATE-----
-> </ca>
-> 
-> #redirect-gateway def1
-
+```sh
+client
+persist-tun
+persist-key
+auth-user-pass
+nobind
+dev tun
+remote < ip adress you can get kubectl get svc -o wide -n vpn > 1194 udp
+resolv-retry infinite
+ 
+<key>
+-----BEGIN PRIVATE KEY-----
+   < client key >
+-----END PRIVATE KEY-----
+</key>
+<cert>
+-----BEGIN CERTIFICATE-----
+    < client crt >
+-----END CERTIFICATE-----
+</cert>
+<ca>
+-----BEGIN CERTIFICATE-----
+     < ca crt >
+-----END CERTIFICATE-----
+</ca>
+ 
+#redirect-gateway def1
+```
 
 
 ## Improvements
