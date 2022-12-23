@@ -204,7 +204,8 @@ resolv-retry infinite
 ## Improvements
 
 ### TODO
-
+- Add support Google Auth
+- Support MFA
 ### BUGS
 
 ### CHANGELOG
