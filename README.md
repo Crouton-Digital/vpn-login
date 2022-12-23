@@ -28,7 +28,7 @@ To use this project, you need `Docker` installed.
 
 ### Building
 
-* Go to [Cloud Build](https://console.cloud.google.com/cloud-build/triggers?project=asset-management-ci-cd)
+* Go to [https://console.cloud.google.com/cloud-build/triggers?project=asset-management-ci-cd](https://console.cloud.google.com/cloud-build/triggers?project=asset-management-ci-cd)
 
 * clone project into your machine
 * install dependencies: `go mod download`
