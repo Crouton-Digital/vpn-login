@@ -161,7 +161,6 @@ kubectl get svc -o wide -n vpn
 #openvpn-service   LoadBalancer   10.7.6.130   34.159.232.126   1194:32603/UDP,65347:31770/UDP   129d   app=openvpn
 ```
 
-
 ## Client OpenVPN Config
 
 Create file <name connection>.ovpn
@@ -193,6 +192,8 @@ resolv-retry infinite
  
 #redirect-gateway def1
 ```
+## How to install OpenVPN client
+* [User Guide: OpenVPN Client Install](https://hodlers.atlassian.net/wiki/spaces/AM/pages/285179905/VPN+to+kubernetes+test+environment)
 
 
 ## Improvements
