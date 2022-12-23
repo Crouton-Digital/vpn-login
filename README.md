@@ -28,13 +28,7 @@ To use this project, you need `Docker` installed.
 
 ### Building
 
-* Go to [https://console.cloud.google.com/cloud-build/triggers?project=asset-management-ci-cd](https://console.cloud.google.com/cloud-build/triggers?project=asset-management-ci-cd)
-
-* clone project into your machine
-* install dependencies: `go mod download`
-* copy `.env.example` into `.env`, tune values if necessary
-* run project: `go run .`
-
+* Go to Google Cloud Build, search and run `OpenVPN-build` trigger and up version
 
 ## Generate certificate for OpenVPN Server
 ```
@@ -65,6 +59,42 @@ mkdir ../client
 cp pki/private/client.key ../client/ 
 cp pki/issued/client.crt ../client/
 ```
+
+
+
+## Client OpenVPN Config
+
+Create file <name connection>.ovpn
+
+```
+client
+persist-tun
+persist-key
+auth-user-pass
+nobind
+dev tun
+remote < ip adress you can get kubectl get svc -o wide -n vpn > 1194 udp
+resolv-retry infinite
+
+<key>
+-----BEGIN PRIVATE KEY-----
+    < client key >
+-----END PRIVATE KEY-----
+</key>
+<cert>
+-----BEGIN CERTIFICATE-----
+    < client crt >
+-----END CERTIFICATE-----
+</cert>
+<ca>
+-----BEGIN CERTIFICATE-----
+    < ca crt >
+-----END CERTIFICATE-----
+</ca>
+
+#redirect-gateway def1
+```
+
 
 ## Improvements
 
